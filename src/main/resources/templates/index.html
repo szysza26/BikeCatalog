@@ -3,12 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>BikeCatalog</title>
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" />
+
+    <script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/5.3.2/js/bootstrap.min.js}"></script>
 </head>
 <body>
-    <ul>
-        <li th:each="bike : ${bikes}" >
-            Id: <span th:text="${bike.id}" />, Name: <span th:text="${bike.name}" />, Content: <span th:text="${bike.content}" />
-        </li>
-    </ul>
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">BikeCatalog</a>
+        </div>
+    </nav>
+    <h1 class="text-center">Bikes:</h1>
+    <div class="container">
+        <div class="row gx-3 gy-3">
+            <div th:each="bike : ${bikes}" class="col-12 col-sm-6 col-md-4 col-lg-3" >
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${bike.name}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
