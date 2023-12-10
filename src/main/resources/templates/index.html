@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BikeCatalog</title>
+</head>
+<body>
+    <ul>
+        <li th:each="bike : ${bikes}" >
+            Id: <span th:text="${bike.id}" />, Name: <span th:text="${bike.name}" />, Content: <span th:text="${bike.content}" />
+        </li>
+    </ul>
+</body>
+</html>
