@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
@@ -34,8 +36,8 @@ class BikeServiceTest {
 
     @Test
     void getAllBikesTest() {
-        List<Bike> bikes = bikeService.getAllBikes();
-        assertEquals(3, bikes.size());
+        Page<Bike> bikes = bikeService.getBikes(0, 12, Sort.Direction.ASC, "name");
+        assertEquals(3, bikes.getContent().size());
     }
 
 }
