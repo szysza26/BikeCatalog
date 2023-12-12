@@ -1,5 +1,6 @@
 package com.github.szysza26.bikecatalog.service;
 
+import com.github.szysza26.bikecatalog.controller.NotFoundException;
 import com.github.szysza26.bikecatalog.model.Bike;
 import com.github.szysza26.bikecatalog.repository.BikeRepository;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,10 @@ public class BikeService {
     public Page<Bike> getBikes(int pageNumber, int pageSize, Sort.Direction sortDirection, String sortBy) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sortDirection, sortBy);
         return bikeRepository.findAll(pageable);
+    }
+
+    public Bike getBike(long id) {
+        return bikeRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
 }

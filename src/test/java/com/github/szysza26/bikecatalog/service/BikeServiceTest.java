@@ -1,5 +1,6 @@
 package com.github.szysza26.bikecatalog.service;
 
+import com.github.szysza26.bikecatalog.controller.NotFoundException;
 import com.github.szysza26.bikecatalog.model.Bike;
 import com.github.szysza26.bikecatalog.repository.BikeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,10 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional
@@ -26,18 +28,29 @@ class BikeServiceTest {
 
     @BeforeEach
     void setUp() {
-        List<Bike> bikes = Arrays.asList(
-            new Bike("Test Bike 1 Name", "Test Bike 1 Description"),
-            new Bike("Test Bike 2 Name", "Test Bike 2 Description"),
-            new Bike("Test Bike 3 Name", "Test Bike 3 Description")
-        );
+        List<Bike> bikes = new ArrayList<>();
+        for(int i = 0; i < 18; i++) {
+            bikes.add(new Bike(String.format("Test Bike %d Name", i + 1),
+                    String.format("Test Bike %d Description", i + 1)));
+        }
         bikeRepository.saveAll(bikes);
     }
 
     @Test
-    void getAllBikesTest() {
-        Page<Bike> bikes = bikeService.getBikes(0, 12, Sort.Direction.ASC, "name");
-        assertEquals(3, bikes.getContent().size());
+    void getBikesTest() {
+        Page<Bike> bikes = bikeService.getBikes(1, 12, Sort.Direction.ASC, "name");
+        assertEquals(6, bikes.getContent().size());
+    }
+
+    @Test
+    void getBikeTest() {
+        Bike bike = bikeService.getBike(10);
+        assertEquals(10, bike.getId());
+    }
+
+    @Test
+    void getBikeNotFoundTest() {
+        assertThrows(NotFoundException.class, () -> bikeService.getBike(20));
     }
 
 }
