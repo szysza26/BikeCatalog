@@ -32,6 +32,8 @@
             </a>
             <span th:text="${bike.name}" />
         </h1>
+        <h5>Brand: <span th:text="${bike.brand} != null ? ${bike.brand.name} : 'No brand'" /></h5>
+        <h5>Category: <span th:text="${bike.category} != null ? ${bike.category.name} : 'No category'" /></h5>
         <p th:text="${bike.content}" />
     </div>
 

@@ -14,11 +14,21 @@ public class Bike {
     @Lob
     private String content;
 
-    public Bike() {};
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
 
-    public Bike(String name, String content) {
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    public Bike() {}
+
+    public Bike(String name, String content, Brand brand, Category category) {
         this.name = name;
         this.content = content;
+        this.brand = brand;
+        this.category = category;
     }
 
     public Long getId() {
@@ -44,4 +54,21 @@ public class Bike {
     public void setContent(String content) {
         this.content = content;
     }
+
+    public Brand getBrand() {
+        return brand;
+    }
+
+    public void setBrand(Brand brand) {
+        this.brand = brand;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
 }

@@ -31,7 +31,7 @@ class BikeServiceTest {
         List<Bike> bikes = new ArrayList<>();
         for(int i = 0; i < 18; i++) {
             bikes.add(new Bike(String.format("Test Bike %d Name", i + 1),
-                    String.format("Test Bike %d Description", i + 1)));
+                    String.format("Test Bike %d Description", i + 1), null, null));
         }
         bikeRepository.saveAll(bikes);
     }
