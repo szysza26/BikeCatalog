@@ -62,6 +62,11 @@ public class Category {
         this.children = children;
     }
 
+    public void addChild(Category child) {
+        children.add(child);
+        child.setParent(this);
+    }
+
     public List<Bike> getBikes() {
         return bikes;
     }

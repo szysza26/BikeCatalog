@@ -2,6 +2,7 @@ package com.github.szysza26.bikecatalog.controller;
 
 import com.github.szysza26.bikecatalog.model.Bike;
 import com.github.szysza26.bikecatalog.service.BikeService;
+import com.github.szysza26.bikecatalog.service.CategoryService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -14,12 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class BikeController {
 
     private BikeService bikeService;
+    private CategoryService categoryService;
     private final int PAGE_SIZE = 12;
     private final Sort.Direction SORT_DIRECTION = Sort.Direction.ASC;
     private final String SORT_BY = "id";
 
-    public BikeController(BikeService bikeService) {
+    public BikeController(BikeService bikeService, CategoryService categoryService) {
         this.bikeService = bikeService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping(value = {"/", "/bikes"})
@@ -35,6 +38,13 @@ public class BikeController {
     public String show(@PathVariable long id, Model model) {
         Bike bike = bikeService.getBike(id);
         model.addAttribute("bike", bike);
+
+        String brand = bike.getBrand() != null ? bike.getBrand().getName() : null;
+        model.addAttribute("brand", brand);
+
+        String category = categoryService.getFullName(bike.getCategory());
+        model.addAttribute("category", category);
+
         return "bike/show";
     }
 
