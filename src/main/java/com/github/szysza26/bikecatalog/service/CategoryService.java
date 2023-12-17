@@ -1,5 +1,6 @@
 package com.github.szysza26.bikecatalog.service;
 
+import com.github.szysza26.bikecatalog.controller.NotFoundException;
 import com.github.szysza26.bikecatalog.model.Category;
 import com.github.szysza26.bikecatalog.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,22 @@ public class CategoryService {
 
     public CategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
+    }
+
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAll();
+    }
+
+    public Category getCategory(long id) {
+        return categoryRepository.findById(id).orElseThrow(NotFoundException::new);
+    }
+
+    public Category saveCategory(Category category) {
+        return categoryRepository.save(category);
+    }
+
+    public void deleteCategory(Category category) {
+        categoryRepository.delete(category);
     }
 
     public List<Category> getCategoryPath (Category category) {
