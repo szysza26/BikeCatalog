@@ -56,4 +56,24 @@ public class CategoryService {
         return categoryPath.stream().map(Category::getName).collect(Collectors.joining(" -> "));
     }
 
+    public List<Category> getSortedCategories(Category parent) {
+        return getSortedCategories(parent, null);
+    }
+
+    public List<Category> getSortedCategories(Category parent, Category stopAt) {
+        List<Category> sortedCategories = new ArrayList<>();
+
+        if(stopAt != null && stopAt.equals(parent))
+            return sortedCategories;
+
+        if(parent != null)
+            sortedCategories.add(parent);
+
+        List<Category> children = categoryRepository.getCategoriesByParent(parent);
+        for(Category category : children) {
+            sortedCategories.addAll(getSortedCategories(category, stopAt));
+        }
+
+        return sortedCategories;
+    }
 }
