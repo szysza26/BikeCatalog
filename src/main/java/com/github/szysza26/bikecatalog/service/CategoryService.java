@@ -5,9 +5,7 @@ import com.github.szysza26.bikecatalog.model.Category;
 import com.github.szysza26.bikecatalog.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,24 +54,19 @@ public class CategoryService {
         return categoryPath.stream().map(Category::getName).collect(Collectors.joining(" -> "));
     }
 
-    public List<Category> getSortedCategories(Category parent) {
-        return getSortedCategories(parent, null);
-    }
+    public LinkedHashMap<Category, String> getCategoriesHierarchical(Category parent, String parentPath, Category stopAt) {
+        LinkedHashMap<Category, String> categories = new LinkedHashMap<>();
 
-    public List<Category> getSortedCategories(Category parent, Category stopAt) {
-        List<Category> sortedCategories = new ArrayList<>();
-
-        if(stopAt != null && stopAt.equals(parent))
-            return sortedCategories;
-
-        if(parent != null)
-            sortedCategories.add(parent);
-
-        List<Category> children = categoryRepository.getCategoriesByParent(parent);
-        for(Category category : children) {
-            sortedCategories.addAll(getSortedCategories(category, stopAt));
+        List<Category> nodes = parent != null ? parent.getChildren() : categoryRepository.findByParentIsNull();
+        nodes.sort(Comparator.comparing(Category::getName));
+        for(Category node : nodes) {
+            if(node.equals(stopAt))
+                continue;
+            String path = parentPath + node.getName();
+            categories.put(node, path);
+            categories.putAll(getCategoriesHierarchical(node, path + " -> ", stopAt));
         }
 
-        return sortedCategories;
+        return categories;
     }
 }

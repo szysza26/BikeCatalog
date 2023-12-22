@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedHashMap;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -36,5 +38,11 @@ public class CategoryServiceTest {
     void getFullNameTest() {
         String fullName = categoryService.getFullName(c1AI);
         assertEquals("Category 1 -> Category 1 A -> Category 1 A I", fullName);
+    }
+
+    @Test
+    void getCategoriesHierarchicalTest() {
+        LinkedHashMap<Category, String> categories = categoryService.getCategoriesHierarchical(null, "", null);
+        assertEquals("Category 1 -> Category 1 A -> Category 1 A I", categories.values().stream().toList().get(2));
     }
 }

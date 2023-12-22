@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.LinkedHashMap;
 
 @Controller
 public class CategoryController {
@@ -19,7 +19,8 @@ public class CategoryController {
 
     @GetMapping("/admin/categories")
     public String index(Model model) {
-        List<Category> categories =  categoryService.getSortedCategories(null);
+        LinkedHashMap<Category, String> categories =
+                categoryService.getCategoriesHierarchical(null, "", null);
         model.addAttribute("categories", categories);
         return "admin/category/index";
     }
@@ -27,8 +28,9 @@ public class CategoryController {
     @GetMapping("/admin/categories/new")
     public String newCategory(Model model) {
         model.addAttribute("category", new Category());
-        List<Category> categories = categoryService.getSortedCategories(null);
-        model.addAttribute("parents", categories);
+        LinkedHashMap<Category, String> categories =
+                categoryService.getCategoriesHierarchical(null, "", null);
+        model.addAttribute("categories", categories);
         return "admin/category/form";
     }
 
@@ -36,8 +38,9 @@ public class CategoryController {
     public String editCategories(Model model, @PathVariable long id) {
         Category category = categoryService.getCategory(id);
         model.addAttribute("category", category);
-        List<Category> categories = categoryService.getSortedCategories(null, category);
-        model.addAttribute("parents", categories.stream().filter(c -> c.getId() != id).toList());
+        LinkedHashMap<Category, String> categories =
+                categoryService.getCategoriesHierarchical(null, "", category);
+        model.addAttribute("categories", categories);
         return "admin/category/form";
     }
 

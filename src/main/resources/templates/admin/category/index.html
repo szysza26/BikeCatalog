@@ -35,19 +35,21 @@
                 <th scope="col">ID</th>
                 <th scope="col">Parent</th>
                 <th scope="col">Name</th>
+                <th scope="col">Full name</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
         <tbody>
-            <tr th:each="category : ${categories}">
-                <th scope="row" th:text="${category.id}">
-                <td th:text="${category.parent} != null ? ${category.parent.name} : 'ROOT'"/>
-                <td th:text="${category.name}"/>
+            <tr th:each="entry : ${categories}">
+                <th scope="row" th:text="${entry.key.id}">
+                <td th:text="${entry.key.parent} != null ? ${entry.key.parent.name} : 'ROOT'"/>
+                <td th:text="${entry.key.name}"/>
+                <td th:text="${entry.value}"/>
                 <td>
-                    <a class="btn btn-warning" role="button" th:href="@{/admin/categories/{id}(id = ${category.id})}" >
+                    <a class="btn btn-warning" role="button" th:href="@{/admin/categories/{id}(id = ${entry.key.id})}" >
                         <i class="fa-solid fa-pen"></i>
                     </a>
-                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal" th:data-parameter1="${category.id}" th:data-parameter2="${category.name}" th:onclick="deleteCategory(this.getAttribute('data-parameter1'),this.getAttribute('data-parameter2'))" >
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal" th:data-parameter1="${entry.key.id}" th:data-parameter2="${entry.key.name}" th:onclick="deleteCategory(this.getAttribute('data-parameter1'),this.getAttribute('data-parameter2'))" >
                         <i class="fa-solid fa-trash"></i>
                     </button>
                 </td>

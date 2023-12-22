@@ -31,7 +31,7 @@
             <label for="parentInput" class="form-label">Parent category</label>
             <select class="form-select" id="parentInput" th:field="*{parent}">
                 <option value="">ROOT</option>
-                <option th:each="parent : ${parents}" th:value="${parent.id}" th:text="${parent.name}" />
+                <option th:each="entry : ${categories}" th:value="${entry.key.id}" th:text="${entry.value}" />
             </select>
         </div>
         <div class="mb-3">
