@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.LinkedHashMap;
 
 @Controller
-public class CategoryController {
+public class CategoryAdminController {
 
     private CategoryService categoryService;
 
-    public CategoryController(CategoryService categoryService) {
+    public CategoryAdminController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
