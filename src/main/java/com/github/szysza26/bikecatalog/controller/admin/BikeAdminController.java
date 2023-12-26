@@ -7,6 +7,7 @@ import com.github.szysza26.bikecatalog.service.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -48,8 +49,8 @@ public class BikeAdminController {
     }
 
     @PostMapping("/admin/bikes/save")
-    public String saveBike(@ModelAttribute Bike bike) {
-        bikeService.saveBike(bike);
+    public String saveBike(@ModelAttribute Bike bike, @RequestParam MultipartFile thumbnailFile) {
+        bikeService.saveBike(bike, thumbnailFile);
         return "redirect:/admin/bikes";
     }
 

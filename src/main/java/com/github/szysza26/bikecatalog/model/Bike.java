@@ -22,13 +22,16 @@ public class Bike {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    private String thumbnail;
+
     public Bike() {}
 
-    public Bike(String name, String content, Brand brand, Category category) {
+    public Bike(String name, String content, Brand brand, Category category, String thumbnail) {
         this.name = name;
         this.content = content;
         this.brand = brand;
         this.category = category;
+        this.thumbnail = thumbnail;
     }
 
     public Long getId() {
@@ -71,4 +74,11 @@ public class Bike {
         this.category = category;
     }
 
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
 }

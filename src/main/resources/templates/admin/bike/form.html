@@ -6,6 +6,26 @@
 
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" />
     <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.4.2/css/all.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        function changeThumbnail(fileInput) {
+            var file = fileInput.files[0];
+
+            if(file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#bike-thumbnail').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                var originalSrc = /*[[${bike.thumbnail} != null ? @{/thumbnails/{thumbnail}(thumbnail = ${bike.thumbnail})} : @{/images/bike.png}]]*/;
+                $('#bike-thumbnail').attr('src', originalSrc);
+            }
+        }
+        /*]]>*/
+    </script>
 </head>
 <body>
 <nav class="navbar bg-body-tertiary">
@@ -21,7 +41,7 @@
         </a>
         <span th:text="${bike.id} != null ? 'Edit bike' : 'Add new bike'" />
     </h1>
-    <form th:action="@{/admin/bikes/save}" th:object="${bike}" method="post">
+    <form th:action="@{/admin/bikes/save}" enctype="multipart/form-data" th:object="${bike}" method="post">
         <input type="hidden" th:field="*{id}">
         <div class="mb-3" th:if="${bike.id != null}">
             <label for="idInput" class="form-label">ID</label>
@@ -45,6 +65,12 @@
                 <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" />
             </select>
         </div>
+        <input type="hidden" th:field="*{thumbnail}">
+        <div class="mb-3">
+            <label for="thumbnailFile" class="form-label">Thumbnail</label>
+            <input class="form-control" type="file" id="thumbnailFile" accept="image/*" name="thumbnailFile" onchange="changeThumbnail(this)">
+        </div>
+        <img id="bike-thumbnail" class="img-thumbnail img-bike" th:src="${bike.thumbnail} != null ? @{/thumbnails/{thumbnail}(thumbnail = ${bike.thumbnail})} : @{/images/bike.png}" alt="Bike Image">
         <div class="mb-3">
             <label for="contentInput" class="form-label">Content</label>
             <textarea class="form-control" id="contentInput" rows="3" th:field="*{content}"></textarea>

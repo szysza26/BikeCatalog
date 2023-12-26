@@ -6,6 +6,7 @@
 
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" />
     <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.4.2/css/all.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
 </head>
 <body>
     <nav class="navbar bg-body-tertiary">
@@ -20,7 +21,7 @@
         <div class="row gx-3 gy-3">
             <div th:each="bike : ${bikes}" class="col-12 col-sm-6 col-md-4 col-lg-3" >
                 <div class="card">
-                    <img th:src="@{/images/bike.png}" class="card-img-top p-3" alt="Bike Image">
+                    <img th:src="${bike.thumbnail} != null ? @{/thumbnails/{thumbnail}(thumbnail = ${bike.thumbnail})} : @{/images/bike.png}" class="card-img-top p-3 img-bike-card" alt="Bike Image">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${bike.name}" />
                         <h6 class="card-subtitle text-body-secondary" th:text="${bike.brand} != null ? ${bike.brand.name} : 'No brand'" />
