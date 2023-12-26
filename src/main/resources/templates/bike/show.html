@@ -36,7 +36,7 @@
         <h5>Brand: <span th:text="${brand} != null ? ${brand} : 'No brand'" /></h5>
         <h5>Category: <span th:text="${category} != null ? ${category} : 'No category'" /></h5>
         <img class="img-thumbnail img-bike" th:src="${bike.thumbnail} != null ? @{/thumbnails/{thumbnail}(thumbnail = ${bike.thumbnail})} : @{/images/bike.png}" alt="Bike Image">
-        <p th:text="${bike.content}" />
+        <p th:utext="${bike.content}" />
     </div>
 
     <script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
