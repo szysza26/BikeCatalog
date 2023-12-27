@@ -1,40 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>BikeCatalog</title>
-
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" />
-    <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.4.2/css/all.min.css}" />
-    <link rel="stylesheet" th:href="@{/css/main.css}" />
-
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        function changeThumbnail(fileInput) {
-            var file = fileInput.files[0];
-
-            if(file) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#bike-thumbnail').attr('src', e.target.result);
-                };
-                reader.readAsDataURL(file);
-            } else {
-                var originalSrc = /*[[${bike.thumbnail} != null ? @{/thumbnails/{thumbnail}(thumbnail = ${bike.thumbnail})} : @{/images/bike.png}]]*/;
-                $('#bike-thumbnail').attr('src', originalSrc);
-            }
-        }
-        /*]]>*/
-    </script>
-</head>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
 <body>
-<nav class="navbar bg-body-tertiary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">BikeCatalog</a>
-    </div>
-</nav>
 
-<div class="container">
+<th:block layout:fragment="page-content">
     <h1>
         <a class="icon-link" style="text-decoration: none;" th:href="@{/admin/bikes}">
             <i class="fa-solid fa-left-long"></i>
@@ -70,26 +38,49 @@
             <label for="thumbnailFile" class="form-label">Thumbnail</label>
             <input class="form-control" type="file" id="thumbnailFile" accept="image/*" name="thumbnailFile" onchange="changeThumbnail(this)">
         </div>
-        <img id="bike-thumbnail" class="img-thumbnail img-bike" th:src="${bike.thumbnail} != null ? @{/thumbnails/{thumbnail}(thumbnail = ${bike.thumbnail})} : @{/images/bike.png}" alt="Bike Image">
+        <img id="bike-thumbnail" class="img-thumbnail img-bike" th:src="${!#strings.isEmpty(bike.thumbnail)} ? @{/thumbnails/{thumbnail}(thumbnail = ${bike.thumbnail})} : @{/images/bike.png}" alt="Bike Image">
         <div class="mb-3">
             <label for="contentInput" class="form-label">Content</label>
             <textarea class="form-control" id="contentInput" rows="3" th:field="*{content}"></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
-</div>
+</th:block>
 
-<script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/5.3.2/js/bootstrap.min.js}"></script>
-<script th:src="@{/webjars/ckeditor/31.0.0/classic/ckeditor.js}"></script>
-<script>
-    ClassicEditor
-        .create( document.querySelector( '#contentInput' ), {
-            removePlugins: ['CKFinderUploadAdapter', 'CKFinder', 'EasyImage', 'Image', 'ImageCaption', 'ImageStyle', 'ImageToolbar', 'ImageUpload', 'MediaEmbed'],
-        } )
-        .catch( error => {
-            console.error( error );
-        } );
-</script>
+<th:block layout:fragment="page-script">
+    <script th:src="@{/webjars/ckeditor/31.0.0/classic/ckeditor.js}"></script>
+    <script th:inline="javascript">
+        function deleteCategory(id, name) {
+            $("#delete-confirm-text").text(`Are you sure to delete Category(id: ${id}, name: ${name})?`);
+            $("#delete-form-id").val(id);
+        }
+
+        ClassicEditor
+            .create( document.querySelector( '#contentInput' ), {
+                removePlugins: ['CKFinderUploadAdapter', 'CKFinder', 'EasyImage', 'Image', 'ImageCaption', 'ImageStyle', 'ImageToolbar', 'ImageUpload', 'MediaEmbed'],
+            } )
+            .catch( error => {
+                console.error( error );
+            } );
+
+        /*<![CDATA[*/
+        function changeThumbnail(fileInput) {
+            var file = fileInput.files[0];
+
+            if(file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#bike-thumbnail').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                var originalSrc = /*[[${!#strings.isEmpty(bike.thumbnail)} ? @{/thumbnails/{thumbnail}(thumbnail = ${bike.thumbnail})} : @{/images/bike.png}]]*/;
+                $('#bike-thumbnail').attr('src', originalSrc);
+            }
+        }
+        /*]]>*/
+    </script>
+</th:block>
+
 </body>
 </html>

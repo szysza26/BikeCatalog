@@ -1,27 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>BikeCatalog</title>
-
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" />
-    <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.4.2/css/all.min.css}" />
-
-    <script>
-        function deleteCategory(id, name) {
-            $("#delete-confirm-text").text(`Are you sure to delete Category(id: ${id}, name: ${name})?`);
-            $("#delete-form-id").val(id);
-        }
-    </script>
-</head>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
 <body>
-<nav class="navbar bg-body-tertiary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">BikeCatalog</a>
-    </div>
-</nav>
 
-<div class="container">
+<th:block layout:fragment="page-content">
     <h1>
         <a class="icon-link" style="text-decoration: none;" th:href="@{/admin}">
             <i class="fa-solid fa-left-long"></i>
@@ -31,60 +12,67 @@
 
     <table class="table">
         <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Parent</th>
-                <th scope="col">Name</th>
-                <th scope="col">Full name</th>
-                <th scope="col">Action</th>
-            </tr>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Parent</th>
+            <th scope="col">Name</th>
+            <th scope="col">Full name</th>
+            <th scope="col">Action</th>
+        </tr>
         </thead>
         <tbody>
-            <tr th:each="entry : ${categories}">
-                <th scope="row" th:text="${entry.key.id}">
-                <td th:text="${entry.key.parent} != null ? ${entry.key.parent.name} : 'ROOT'"/>
-                <td th:text="${entry.key.name}"/>
-                <td th:text="${entry.value}"/>
-                <td>
-                    <a class="btn btn-warning" role="button" th:href="@{/admin/categories/{id}(id = ${entry.key.id})}" >
-                        <i class="fa-solid fa-pen"></i>
-                    </a>
-                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal" th:data-parameter1="${entry.key.id}" th:data-parameter2="${entry.key.name}" th:onclick="deleteCategory(this.getAttribute('data-parameter1'),this.getAttribute('data-parameter2'))" >
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
+        <tr th:each="entry : ${categories}">
+            <th scope="row" th:text="${entry.key.id}">
+            <td th:text="${entry.key.parent} != null ? ${entry.key.parent.name} : 'ROOT'"/>
+            <td th:text="${entry.key.name}"/>
+            <td th:text="${entry.value}"/>
+            <td>
+                <a class="btn btn-warning" role="button" th:href="@{/admin/categories/{id}(id = ${entry.key.id})}" >
+                    <i class="fa-solid fa-pen"></i>
+                </a>
+                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal" th:data-parameter1="${entry.key.id}" th:data-parameter2="${entry.key.name}" th:onclick="deleteCategory(this.getAttribute('data-parameter1'),this.getAttribute('data-parameter2'))" >
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </td>
+        </tr>
         </tbody>
     </table>
 
     <a class="btn btn-primary" role="button" th:href="@{/admin/categories/new}" >
         Add new category
     </a>
-</div>
+</th:block>
 
-<!-- delete category modal -->
-<div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="deleteCategoryModalLabel">Delete Category</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p id="delete-confirm-text" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <form th:action="@{/admin/categories/delete}" method="post">
-                    <input id="delete-form-id" type="hidden" name="id"/>
-                    <button type="submit" class="btn btn-danger" id="delete-confirm-action">Delete</button>
-                </form>
+<th:block layout:fragment="page-other">
+    <!-- delete category modal -->
+    <div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteCategoryModalLabel">Delete Category</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="delete-confirm-text" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <form th:action="@{/admin/categories/delete}" method="post">
+                        <input id="delete-form-id" type="hidden" name="id"/>
+                        <button type="submit" class="btn btn-danger" id="delete-confirm-action">Delete</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</th:block>
 
-<script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/5.3.2/js/bootstrap.min.js}"></script>
+<script layout:fragment="page-script">
+    function deleteCategory(id, name) {
+        $("#delete-confirm-text").text(`Are you sure to delete Category(id: ${id}, name: ${name})?`);
+        $("#delete-form-id").val(id);
+    }
+</script>
+
 </body>
 </html>

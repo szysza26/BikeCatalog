@@ -1,45 +1,30 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8">
-    <title>BikeCatalog</title>
-
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" />
-    <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.4.2/css/all.min.css}" />
-    <link rel="stylesheet" th:href="@{/css/main.css}" />
-
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        function goBack() {
-            if(document.referrer)
-                window.history.back();
-            else
-                window.location.replace(/*[[@{/bikes}]]*/);
-        }
-        /*]]>*/
-    </script>
-</head>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
 <body>
-    <nav class="navbar bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">BikeCatalog</a>
-        </div>
-    </nav>
 
-    <div class="container">
-        <h1>
-            <a onclick="goBack()" class="icon-link" style="text-decoration: none;">
-                <i class="fa-solid fa-left-long"></i>
-            </a>
-            <span th:text="${bike.name}" />
-        </h1>
-        <h5>Brand: <span th:text="${brand} != null ? ${brand} : 'No brand'" /></h5>
-        <h5>Category: <span th:text="${category} != null ? ${category} : 'No category'" /></h5>
-        <img class="img-thumbnail img-bike" th:src="${bike.thumbnail} != null ? @{/thumbnails/{thumbnail}(thumbnail = ${bike.thumbnail})} : @{/images/bike.png}" alt="Bike Image">
-        <p th:utext="${bike.content}" />
-    </div>
+<th:block layout:fragment="page-content">
+    <h1>
+        <a onclick="goBack()" class="icon-link" style="text-decoration: none;">
+            <i class="fa-solid fa-left-long"></i>
+        </a>
+        <span th:text="${bike.name}" />
+    </h1>
+    <h5>Brand: <span th:text="${brand} != null ? ${brand} : 'No brand'" /></h5>
+    <h5>Category: <span th:text="${category} != null ? ${category} : 'No category'" /></h5>
+    <img class="img-thumbnail img-bike" th:src="${!#strings.isEmpty(bike.thumbnail)} ? @{/thumbnails/{thumbnail}(thumbnail = ${bike.thumbnail})} : @{/images/bike.png}" alt="Bike Image">
+    <p th:utext="${bike.content}" />
+</th:block>
 
-    <script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
-    <script th:src="@{/webjars/bootstrap/5.3.2/js/bootstrap.min.js}"></script>
+<script layout:fragment="page-script" th:inline="javascript">
+    /*<![CDATA[*/
+    function goBack() {
+        if(document.referrer)
+            window.history.back();
+        else
+            window.location.replace(/*[[@{/bikes}]]*/);
+    }
+    /*]]>*/
+</script>
+
 </body>
 </html>
