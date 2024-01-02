@@ -15,6 +15,15 @@
     <h5>Updated At: <span th:text="${bike.updatedAt} != null ? ${bike.updatedAt} : '-'" /></h5>
     <img class="img-thumbnail img-bike" th:src="${!#strings.isEmpty(bike.thumbnail)} ? @{/thumbnails/{thumbnail}(thumbnail = ${bike.thumbnail})} : @{/images/bike.png}" alt="Bike Image">
     <p th:utext="${bike.content}" />
+    <h5>Properties:</h5>
+    <table class="table">
+        <tbody>
+        <tr th:each="property : ${bike.properties}">
+            <td th:text="${property.name}"></td>
+            <td th:text="${property.value}"></td>
+        </tr>
+        </tbody>
+    </table>
 </th:block>
 
 <script layout:fragment="page-script" th:inline="javascript">

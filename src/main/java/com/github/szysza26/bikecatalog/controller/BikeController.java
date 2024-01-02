@@ -34,7 +34,7 @@ public class BikeController {
         return "bike/index";
     }
 
-    @GetMapping("/bike/{id}")
+    @GetMapping("/bikes/{id}")
     public String show(@PathVariable long id, Model model) {
         Bike bike = bikeService.getBike(id);
         model.addAttribute("bike", bike);

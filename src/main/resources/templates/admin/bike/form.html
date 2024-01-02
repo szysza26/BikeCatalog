@@ -51,6 +51,36 @@
             <label for="contentInput" class="form-label">Content</label>
             <textarea class="form-control" id="contentInput" rows="3" th:field="*{content}"></textarea>
         </div>
+        <div class="mb-3">
+            <label for="propertiesInput" class="form-label">Properties</label>
+            <table class="table" id="propertiesInput">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Value</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="property, propertyStat : *{properties}">
+                        <td>
+                            <input type="text" class="form-control" th:field="*{properties[__${propertyStat.index}__].name}" th:id="${'properties[' + propertyStat.index + '].name'}">
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" th:field="*{properties[__${propertyStat.index}__].value}" th:id="${'properties[' + propertyStat.index + '].value'}">
+                        </td>
+                        <td>
+                            <button class="btn btn-danger" onclick="return deleteProperty(this)">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn btn-primary" onclick="return addProperty()">
+                Add property
+            </button>
+        </div>
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
 </th:block>
@@ -58,9 +88,45 @@
 <th:block layout:fragment="page-script">
     <script th:src="@{/webjars/ckeditor/31.0.0/classic/ckeditor.js}"></script>
     <script th:inline="javascript">
-        function deleteCategory(id, name) {
-            $("#delete-confirm-text").text(`Are you sure to delete Category(id: ${id}, name: ${name})?`);
-            $("#delete-form-id").val(id);
+        function deleteProperty(button) {
+            const td = button.parentNode;
+            const row = td.parentNode;
+            const rowIndex = row.rowIndex;
+            $('#propertiesInput tr').eq(rowIndex).remove();
+
+            $('#propertiesInput tr').each(function(index, trDOM) {
+                if(index == 0)
+                    return;
+
+                const tr = $(this);
+
+                tr.find('td').eq(0).find('input').eq(0).attr("name", "properties[" + (index - 1).toString() + "].name");
+                tr.find('td').eq(0).find('input').eq(0).attr("id", "properties[" + (index - 1).toString() + "].name");
+
+                tr.find('td').eq(1).find('input').eq(0).attr("name", "properties[" + (index - 1).toString() + "].value");
+                tr.find('td').eq(1).find('input').eq(0).attr("id", "properties[" + (index - 1).toString() + "].value");
+            })
+
+            return false;
+        }
+
+        function addProperty() {
+            const rowCount = $('#propertiesInput tr').length - 1;
+            const newProperty = '<tr>' +
+                                    '<td>' +
+                                        '<input type="text" class="form-control" value="" name="properties[' + rowCount + '].name" id="properties[' + rowCount + '].name">' +
+                                    '</td>' +
+                                    '<td>' +
+                                        '<input type="text" class="form-control" value="" name="properties[' + rowCount + '].value" id="properties[' + rowCount + '].value">' +
+                                    '</td>' +
+                                    '<td>' +
+                                        '<button class="btn btn-danger" onclick="return deleteProperty(this)">' +
+                                            '<i class="fa-solid fa-trash"></i>' +
+                                        '</button>' +
+                                    '</td>' +
+                                 '</tr>';
+            $('#propertiesInput tbody').append(newProperty);
+            return false;
         }
 
         ClassicEditor

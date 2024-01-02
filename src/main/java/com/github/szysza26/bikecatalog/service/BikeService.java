@@ -2,6 +2,7 @@ package com.github.szysza26.bikecatalog.service;
 
 import com.github.szysza26.bikecatalog.controller.NotFoundException;
 import com.github.szysza26.bikecatalog.model.Bike;
+import com.github.szysza26.bikecatalog.model.Property;
 import com.github.szysza26.bikecatalog.repository.BikeRepository;
 import com.github.szysza26.bikecatalog.service.utils.FileUtil;
 import org.springframework.data.domain.Page;
@@ -41,6 +42,9 @@ public class BikeService {
     }
 
     public Bike saveBike(Bike bike, MultipartFile thumbnailFile) {
+        for(Property property : bike.getProperties()) {
+            property.setBike(bike);
+        }
         uploadThumbnail(bike, thumbnailFile);
         return bikeRepository.save(bike);
     }

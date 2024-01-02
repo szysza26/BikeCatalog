@@ -13,7 +13,7 @@
                     <h5 class="card-title" th:text="${bike.name}" />
                     <h6 class="card-subtitle text-body-secondary" th:text="${bike.brand} != null ? ${bike.brand.name} : 'No brand'" />
                     <h6 class="card-subtitle text-body-secondary mb-2" th:text="${bike.category} != null ? ${bike.category.name} : 'No category'" />
-                    <a th:href="@{/bike/{id}(id = ${bike.id})}" class="btn btn-primary">Show</a>
+                    <a th:href="@{/bikes/{id}(id = ${bike.id})}" class="btn btn-primary">Show</a>
                 </div>
             </div>
         </div>
