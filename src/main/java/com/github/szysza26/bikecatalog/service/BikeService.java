@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -25,7 +26,9 @@ public class BikeService {
     }
 
     public List<Bike> getAllBikes() {
-        return bikeRepository.findAll();
+        List<Bike> bikes = bikeRepository.findAll();
+        bikes.sort(Comparator.comparing(Bike::getName));
+        return bikes;
     }
 
     public Page<Bike> getBikes(int pageNumber, int pageSize, Sort.Direction sortDirection, String sortBy) {

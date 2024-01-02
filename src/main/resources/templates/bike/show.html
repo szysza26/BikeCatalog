@@ -11,6 +11,8 @@
     </h1>
     <h5>Brand: <span th:text="${brand} != null ? ${brand} : 'No brand'" /></h5>
     <h5>Category: <span th:text="${category} != null ? ${category} : 'No category'" /></h5>
+    <h5>Created At: <span th:text="${bike.createdAt} != null ? ${bike.createdAt} : '-'" /></h5>
+    <h5>Updated At: <span th:text="${bike.updatedAt} != null ? ${bike.updatedAt} : '-'" /></h5>
     <img class="img-thumbnail img-bike" th:src="${!#strings.isEmpty(bike.thumbnail)} ? @{/thumbnails/{thumbnail}(thumbnail = ${bike.thumbnail})} : @{/images/bike.png}" alt="Bike Image">
     <p th:utext="${bike.content}" />
 </th:block>

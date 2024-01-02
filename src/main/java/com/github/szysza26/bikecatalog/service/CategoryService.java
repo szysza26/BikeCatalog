@@ -18,7 +18,9 @@ public class CategoryService {
     }
 
     public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+        List<Category> categories = categoryRepository.findAll();
+        categories.sort(Comparator.comparing(Category::getName));
+        return categories;
     }
 
     public Category getCategory(long id) {

@@ -17,8 +17,8 @@ public class BikeController {
     private BikeService bikeService;
     private CategoryService categoryService;
     private final int PAGE_SIZE = 12;
-    private final Sort.Direction SORT_DIRECTION = Sort.Direction.ASC;
-    private final String SORT_BY = "id";
+    private final Sort.Direction SORT_DIRECTION = Sort.Direction.DESC;
+    private final String SORT_BY = "createdAt";
 
     public BikeController(BikeService bikeService, CategoryService categoryService) {
         this.bikeService = bikeService;

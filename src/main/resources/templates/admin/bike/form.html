@@ -15,6 +15,14 @@
             <label for="idInput" class="form-label">ID</label>
             <input type="text" class="form-control" id="idInput" th:field="*{id}" disabled>
         </div>
+        <div class="mb-3" th:if="${bike.createdAt != null}">
+            <label for="createdAtInput" class="form-label">Created At</label>
+            <input type="text" class="form-control" id="createdAtInput" th:field="*{createdAt}" disabled>
+        </div>
+        <div class="mb-3" th:if="${bike.updatedAt != null}">
+            <label for="updatedAtInput" class="form-label">Updated At</label>
+            <input type="text" class="form-control" id="updatedAtInput" th:field="*{updatedAt}" disabled>
+        </div>
         <div class="mb-3">
             <label for="nameInput" class="form-label">Name</label>
             <input type="text" class="form-control" id="nameInput" th:field="*{name}">
@@ -30,7 +38,7 @@
             <label for="categoryInput" class="form-label">Category</label>
             <select class="form-select" id="categoryInput" th:field="*{category}">
                 <option value="">No category</option>
-                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" />
+                <option th:each="entry : ${categories}" th:value="${entry.key.id}" th:text="${entry.value}" />
             </select>
         </div>
         <input type="hidden" th:field="*{thumbnail}">

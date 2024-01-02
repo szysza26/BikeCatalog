@@ -1,6 +1,7 @@
 package com.github.szysza26.bikecatalog.controller.admin;
 
 import com.github.szysza26.bikecatalog.model.Bike;
+import com.github.szysza26.bikecatalog.model.Category;
 import com.github.szysza26.bikecatalog.service.BikeService;
 import com.github.szysza26.bikecatalog.service.BrandService;
 import com.github.szysza26.bikecatalog.service.CategoryService;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Controller
@@ -35,7 +37,9 @@ public class BikeAdminController {
     public String newBike(Model model) {
         model.addAttribute("bike", new Bike());
         model.addAttribute("brands", brandService.getAllBrands());
-        model.addAttribute("categories", categoryService.getAllCategories());
+        LinkedHashMap<Category, String> categories =
+                categoryService.getCategoriesHierarchical(null, "", null);
+        model.addAttribute("categories", categories);
         return "admin/bike/form";
     }
 
@@ -44,7 +48,9 @@ public class BikeAdminController {
         Bike bike = bikeService.getBike(id);
         model.addAttribute("bike", bike);
         model.addAttribute("brands", brandService.getAllBrands());
-        model.addAttribute("categories", categoryService.getAllCategories());
+        LinkedHashMap<Category, String> categories =
+                categoryService.getCategoriesHierarchical(null, "", null);
+        model.addAttribute("categories", categories);
         return "admin/bike/form";
     }
 

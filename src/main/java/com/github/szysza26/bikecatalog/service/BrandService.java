@@ -5,6 +5,7 @@ import com.github.szysza26.bikecatalog.model.Brand;
 import com.github.szysza26.bikecatalog.repository.BrandRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -17,7 +18,9 @@ public class BrandService {
     }
 
     public List<Brand> getAllBrands() {
-        return brandRepository.findAll();
+        List<Brand> brands = brandRepository.findAll();
+        brands.sort(Comparator.comparing(Brand::getName));
+        return brands;
     }
 
     public Brand getBrand(long id) {
