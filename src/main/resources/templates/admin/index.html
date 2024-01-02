@@ -3,6 +3,12 @@
 <body>
 
 <th:block layout:fragment="page-content">
+    <div class="row mt-3">
+        <form th:action="@{/logout}" method="post" class="form-inline">
+            Username: <span class="text-danger me-3" th:text="${authentication.name}">User Name</span>
+            <button type="submit" class="btn btn-secondary">Logout</button>
+        </form>
+    </div>
     <h1>Admin Panel:</h1>
     <div class="list-group">
         <a th:href="@{/admin/bikes}" class="list-group-item list-group-item-action">Bikes</a>
