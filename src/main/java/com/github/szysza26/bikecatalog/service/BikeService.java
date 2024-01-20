@@ -1,6 +1,7 @@
 package com.github.szysza26.bikecatalog.service;
 
 import com.github.szysza26.bikecatalog.controller.NotFoundException;
+import com.github.szysza26.bikecatalog.dto.SearchBikeRequest;
 import com.github.szysza26.bikecatalog.model.Bike;
 import com.github.szysza26.bikecatalog.model.Property;
 import com.github.szysza26.bikecatalog.repository.BikeRepository;
@@ -32,9 +33,22 @@ public class BikeService {
         return bikes;
     }
 
-    public Page<Bike> getBikes(int pageNumber, int pageSize, Sort.Direction sortDirection, String sortBy) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, sortDirection, sortBy);
-        return bikeRepository.findAll(pageable);
+    public Page<Bike> getBikes(SearchBikeRequest search) {
+        String[] splitSort = search.getSort().split("\\.", 2);
+        String sortBy = splitSort[0];
+        Sort.Direction sortDirection = splitSort[1].equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC;
+
+        Pageable pageable = PageRequest.of(search.getPageNumber(), search.getPageSize(), sortDirection, sortBy);
+
+        if (search.getBrand() == null && search.getCategory() == null) {
+            return bikeRepository.findByNameContainingIgnoreCase(search.getName(), pageable);
+        } else if (search.getBrand() != null && search.getCategory() == null) {
+            return bikeRepository.findByNameContainingIgnoreCaseAndBrandId(search.getName(), search.getBrand(), pageable);
+        } else if (search.getBrand() == null && search.getCategory() != null) {
+            return bikeRepository.findByNameContainingIgnoreCaseAndCategoryId(search.getName(), search.getCategory(), pageable);
+        } else {
+            return bikeRepository.findByNameContainingIgnoreCaseAndBrandIdAndCategoryId(search.getName(), search.getBrand(), search.getCategory(), pageable);
+        }
     }
 
     public Bike getBike(long id) {

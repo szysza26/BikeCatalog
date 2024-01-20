@@ -3,7 +3,38 @@
 <body>
 
 <th:block layout:fragment="page-content">
-    <h1 class="text-center">Bikes:</h1>
+    <div class="card mt-3 mb-3">
+        <form th:action="@{/bikes}" th:object="${search}" method="get">
+            <div class="form-group m-3">
+                <label for="nameInputText">Name</label>
+                <input type="text" class="form-control" id="nameInputText" th:field="*{name}" name="name">
+            </div>
+            <div class="form-group m-3">
+                <label for="brandSelect">Brand</label>
+                <select class="form-control" id="brandSelect" th:field="*{brand}" name="brand">
+                    <option value="">ALL</option>
+                    <option th:each="brand : ${brands}" th:value="${brand.id}" th:text="${brand.name}" />
+                </select>
+            </div>
+            <div class="form-group m-3">
+                <label for="categorySelect">Category</label>
+                <select class="form-control" id="categorySelect" th:field="*{category}" name="category">
+                    <option value="">ALL</option>
+                    <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" />
+                </select>
+            </div>
+            <div class="form-group m-3">
+                <label for="sortSelect">Sort</label>
+                <select class="form-control" id="sortSelect" th:field="*{sort}" name="sort">
+                    <option value="createdAt.ASC">Created ASC</option>
+                    <option value="createdAt.DESC">Created DESC</option>
+                    <option value="name.ASC">Name ASC</option>
+                    <option value="name.DESC">Name DESC</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary m-3">Search</button>
+        </form>
+    </div>
 
     <div class="row gx-3 gy-3">
         <div th:each="bike : ${bikes}" class="col-12 col-sm-6 col-md-4 col-lg-3" >
@@ -22,15 +53,15 @@
     <nav aria-label="Page navigation" class="m-3">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:class="${pageNumber <= 0} ? 'disabled' : ''">
-                <a class="page-link" th:href="@{/(pageNumber=${pageNumber - 1})}" aria-label="Previous">
+                <a class="page-link" th:href="@{/bikes(pageNumber=${pageNumber - 1}, sort=${search.sort}, name=${search.name}, brand=${search.brand}, category=${search.category})}" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
             <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item" th:class="${pageNumber == i} ? 'active' : ''">
-                <a class="page-link" th:href="@{/(pageNumber=${i})}" th:text="${i + 1}"></a>
+                <a class="page-link" th:href="@{/bikes(pageNumber=${i}, sort=${search.sort}, name=${search.name}, brand=${search.brand}, category=${search.category})}" th:text="${i + 1}"></a>
             </li>
             <li class="page-item" th:class="${pageNumber >= totalPages - 1} ? 'disabled' : ''">
-                <a class="page-link" th:href="@{/(pageNumber=${pageNumber + 1})}" aria-label="Next">
+                <a class="page-link" th:href="@{/bikes(pageNumber=${pageNumber + 1}, sort=${search.sort}, name=${search.name}, brand=${search.brand}, category=${search.category})}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

@@ -1,36 +1,49 @@
 package com.github.szysza26.bikecatalog.controller;
 
+import com.github.szysza26.bikecatalog.dto.SearchBikeRequest;
 import com.github.szysza26.bikecatalog.model.Bike;
+import com.github.szysza26.bikecatalog.model.Brand;
+import com.github.szysza26.bikecatalog.model.Category;
 import com.github.szysza26.bikecatalog.service.BikeService;
+import com.github.szysza26.bikecatalog.service.BrandService;
 import com.github.szysza26.bikecatalog.service.CategoryService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 public class BikeController {
 
     private BikeService bikeService;
     private CategoryService categoryService;
-    private final int PAGE_SIZE = 12;
-    private final Sort.Direction SORT_DIRECTION = Sort.Direction.DESC;
-    private final String SORT_BY = "createdAt";
+    private BrandService brandService;
 
-    public BikeController(BikeService bikeService, CategoryService categoryService) {
+    public BikeController(BikeService bikeService, BrandService brandService, CategoryService categoryService) {
         this.bikeService = bikeService;
+        this.brandService = brandService;
         this.categoryService = categoryService;
     }
 
     @GetMapping(value = {"/", "/bikes"})
-    public String index(@RequestParam(defaultValue = "0") int pageNumber, Model model) {
-        Page<Bike> bikes = bikeService.getBikes(pageNumber, PAGE_SIZE, SORT_DIRECTION, SORT_BY);
+    public String index(SearchBikeRequest search, Model model) {
+        Page<Bike> bikes = bikeService.getBikes(search);
         model.addAttribute("bikes", bikes.getContent());
+
         model.addAttribute("pageNumber", bikes.getNumber());
         model.addAttribute("totalPages", bikes.getTotalPages());
+
+        model.addAttribute("search", search);
+
+        List<Brand> brands = brandService.getAllBrands();
+        model.addAttribute("brands", brands);
+
+        List<Category> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
+
         return "bike/index";
     }
 

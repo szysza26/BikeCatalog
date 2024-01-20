@@ -1,6 +1,7 @@
 package com.github.szysza26.bikecatalog.service;
 
 import com.github.szysza26.bikecatalog.controller.NotFoundException;
+import com.github.szysza26.bikecatalog.dto.SearchBikeRequest;
 import com.github.szysza26.bikecatalog.model.Bike;
 import com.github.szysza26.bikecatalog.repository.BikeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +39,7 @@ class BikeServiceTest {
 
     @Test
     void getBikesTest() {
-        Page<Bike> bikes = bikeService.getBikes(1, 12, Sort.Direction.ASC, "name");
+        Page<Bike> bikes = bikeService.getBikes(new SearchBikeRequest(0, 12, "name.ASC", "", null, null));
         assertEquals(6, bikes.getContent().size());
     }
 
