@@ -3,10 +3,14 @@
 <body>
 
 <th:block layout:fragment="page-content">
-    <h1>
+    <h3>
         <a class="icon-link" style="text-decoration: none;" th:href="@{/admin}">
             <i class="fa-solid fa-left-long"></i>
         </a>
+        Back
+    </h3>
+
+    <h1>
         Categories:
     </h1>
 
@@ -38,7 +42,7 @@
         </tbody>
     </table>
 
-    <a class="btn btn-primary" role="button" th:href="@{/admin/categories/new}" >
+    <a class="btn btn-primary w-100" role="button" th:href="@{/admin/categories/new}" >
         Add new category
     </a>
 </th:block>

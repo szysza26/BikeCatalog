@@ -3,40 +3,42 @@
 <body>
 
 <th:block layout:fragment="page-content">
-    <div class="card mt-3 mb-3">
+    <div class="card mt-3 mb-3 p-3">
         <form th:action="@{/bikes}" th:object="${search}" method="get">
-            <div class="form-group m-3">
+            <div class="form-group">
                 <label for="nameInputText">Name</label>
                 <input type="text" class="form-control" id="nameInputText" th:field="*{name}" name="name">
             </div>
-            <div class="form-group m-3">
+            <div class="form-group mt-3">
                 <label for="brandSelect">Brand</label>
                 <select class="form-control" id="brandSelect" th:field="*{brand}" name="brand">
                     <option value="">ALL</option>
                     <option th:each="brand : ${brands}" th:value="${brand.id}" th:text="${brand.name}" />
                 </select>
             </div>
-            <div class="form-group m-3">
+            <div class="form-group mt-3">
                 <label for="categorySelect">Category</label>
                 <select class="form-control" id="categorySelect" th:field="*{category}" name="category">
                     <option value="">ALL</option>
                     <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" />
                 </select>
             </div>
-            <div class="form-group m-3">
+            <div class="form-group mt-3">
                 <label for="sortSelect">Sort</label>
                 <select class="form-control" id="sortSelect" th:field="*{sort}" name="sort">
-                    <option value="createdAt.ASC">Created ASC</option>
-                    <option value="createdAt.DESC">Created DESC</option>
                     <option value="name.ASC">Name ASC</option>
                     <option value="name.DESC">Name DESC</option>
+                    <option value="createdAt.ASC">Created at ASC</option>
+                    <option value="createdAt.DESC">Created at DESC</option>
+                    <option value="updatedAt.ASC">Updated at ASC</option>
+                    <option value="updatedAt.DESC">Updated at DESC</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary m-3">Search</button>
+            <button type="submit" class="btn btn-primary mt-3 w-100">Search</button>
         </form>
     </div>
 
-    <div class="row gx-3 gy-3">
+    <div th:if="${#lists.size(bikes) > 0}" class="row gx-3 gy-3">
         <div th:each="bike : ${bikes}" class="col-12 col-sm-6 col-md-4 col-lg-3" >
             <div class="card">
                 <img th:src="${!#strings.isEmpty(bike.thumbnail)} ? @{/thumbnails/{thumbnail}(thumbnail = ${bike.thumbnail})} : @{/images/bike.png}" class="card-img-top p-3 img-bike-card" alt="Bike Image">
@@ -50,6 +52,10 @@
         </div>
     </div>
 
+    <div th:unless="${#lists.size(bikes) > 0}" class="alert alert-light text-center">
+        No results
+    </div>
+
     <nav aria-label="Page navigation" class="m-3">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:class="${pageNumber <= 0} ? 'disabled' : ''">
@@ -57,7 +63,7 @@
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item" th:class="${pageNumber == i} ? 'active' : ''">
+            <li th:each="i : ${#numbers.sequence(0, totalPages < 1 ? 0 : totalPages - 1)}" class="page-item" th:class="${pageNumber == i} ? 'active' : ''">
                 <a class="page-link" th:href="@{/bikes(pageNumber=${i}, sort=${search.sort}, name=${search.name}, brand=${search.brand}, category=${search.category})}" th:text="${i + 1}"></a>
             </li>
             <li class="page-item" th:class="${pageNumber >= totalPages - 1} ? 'disabled' : ''">
