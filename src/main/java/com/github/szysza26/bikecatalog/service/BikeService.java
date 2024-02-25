@@ -3,6 +3,7 @@ package com.github.szysza26.bikecatalog.service;
 import com.github.szysza26.bikecatalog.controller.NotFoundException;
 import com.github.szysza26.bikecatalog.dto.SearchBikeRequest;
 import com.github.szysza26.bikecatalog.model.Bike;
+import com.github.szysza26.bikecatalog.model.Category;
 import com.github.szysza26.bikecatalog.model.Property;
 import com.github.szysza26.bikecatalog.repository.BikeRepository;
 import com.github.szysza26.bikecatalog.service.utils.FileUtil;
@@ -16,15 +17,19 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class BikeService {
 
     public final static String BIKE_THUMBNAIL_UPLOAD_DIR = "public/thumbnails/";
     private final BikeRepository bikeRepository;
+    private final CategoryService categoryService;
 
-    public BikeService(BikeRepository bikeRepository) {
+    public BikeService(BikeRepository bikeRepository, CategoryService categoryService) {
         this.bikeRepository = bikeRepository;
+        this.categoryService = categoryService;
     }
 
     public List<Bike> getAllBikes() {
@@ -45,9 +50,15 @@ public class BikeService {
         } else if (search.getBrand() != null && search.getCategory() == null) {
             return bikeRepository.findByNameContainingIgnoreCaseAndBrandId(search.getName(), search.getBrand(), pageable);
         } else if (search.getBrand() == null && search.getCategory() != null) {
-            return bikeRepository.findByNameContainingIgnoreCaseAndCategoryId(search.getName(), search.getCategory(), pageable);
+            Category category = categoryService.getCategory(search.getCategory());
+            Set<Long> categories = categoryService.getAllSubCategories(category).stream().map(Category::getId).collect(Collectors.toSet());
+            categories.add(category.getId());
+            return bikeRepository.findByNameContainingIgnoreCaseAndCategoryIdIn(search.getName(), categories, pageable);
         } else {
-            return bikeRepository.findByNameContainingIgnoreCaseAndBrandIdAndCategoryId(search.getName(), search.getBrand(), search.getCategory(), pageable);
+            Category category = categoryService.getCategory(search.getCategory());
+            Set<Long> categories = categoryService.getAllSubCategories(category).stream().map(Category::getId).collect(Collectors.toSet());
+            categories.add(category.getId());
+            return bikeRepository.findByNameContainingIgnoreCaseAndBrandIdAndCategoryIdIn(search.getName(), search.getBrand(), categories, pageable);
         }
     }
 

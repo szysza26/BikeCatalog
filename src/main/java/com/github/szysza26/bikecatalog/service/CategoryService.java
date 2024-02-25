@@ -71,4 +71,16 @@ public class CategoryService {
 
         return categories;
     }
+
+    public List<Category> getAllSubCategories(Category category) {
+        List<Category> subCategories = new ArrayList<>();
+        List<Category> directSubCategories = categoryRepository.findByParent(category);
+
+        for (Category subCategory : directSubCategories) {
+            subCategories.add(subCategory);
+            subCategories.addAll(getAllSubCategories(subCategory));
+        }
+
+        return subCategories;
+    }
 }
