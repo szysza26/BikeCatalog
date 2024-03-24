@@ -9,14 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -40,7 +38,14 @@ class BikeServiceTest {
     @Test
     void getBikesTest() {
         Page<Bike> bikes = bikeService.getBikes(new SearchBikeRequest(0, 12, "name.ASC", "", null, null));
-        assertEquals(6, bikes.getContent().size());
+        assertEquals(12, bikes.getContent().size());
+    }
+
+    @Test
+    void getBikesByNameTest() {
+        Page<Bike> bikes = bikeService.getBikes(new SearchBikeRequest(0, 12, "name.ASC", "bike 10", null, null));
+        assertEquals(1, bikes.getContent().size());
+        assertEquals("Test Bike 10 Name", bikes.getContent().get(0).getName());
     }
 
     @Test
