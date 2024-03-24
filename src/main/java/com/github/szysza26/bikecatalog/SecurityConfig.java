@@ -43,7 +43,9 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().permitAll())
                 .formLogin(Customizer.withDefaults())
-                .logout(Customizer.withDefaults())
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/")
+                        .permitAll())
                 .build();
     }
 }
