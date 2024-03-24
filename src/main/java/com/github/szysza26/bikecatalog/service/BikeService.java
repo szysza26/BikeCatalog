@@ -7,6 +7,7 @@ import com.github.szysza26.bikecatalog.model.Category;
 import com.github.szysza26.bikecatalog.model.Property;
 import com.github.szysza26.bikecatalog.repository.BikeRepository;
 import com.github.szysza26.bikecatalog.service.utils.FileUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +24,8 @@ import java.util.stream.Collectors;
 @Service
 public class BikeService {
 
-    public final static String BIKE_THUMBNAIL_UPLOAD_DIR = "public/thumbnails/";
+    @Value("${bike_thumbnails_dir}")
+    public String bikeThumbnailsDir;
     private final BikeRepository bikeRepository;
     private final CategoryService categoryService;
 
@@ -87,7 +89,7 @@ public class BikeService {
         removeThumbnail(bike);
 
         String name = FileUtil.generateUniqueFileName(thumbnailFile.getOriginalFilename());
-        Path path = Path.of(BIKE_THUMBNAIL_UPLOAD_DIR + name);
+        Path path = Path.of(bikeThumbnailsDir + name);
 
         if(FileUtil.saveFile(path, thumbnailFile)) {
             bike.setThumbnail(name);
@@ -99,7 +101,7 @@ public class BikeService {
             return;
         }
 
-        Path thumbnailPath = Path.of(BIKE_THUMBNAIL_UPLOAD_DIR + bike.getThumbnail());
+        Path thumbnailPath = Path.of(bikeThumbnailsDir + bike.getThumbnail());
         if(FileUtil.deleteFile(thumbnailPath)) {
             bike.setThumbnail(null);
         }

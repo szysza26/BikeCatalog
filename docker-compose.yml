@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16.2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./docker/db:/var/lib/postgresql/data
+  app:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    ports:
+      - 8080:8080
+    volumes:
+      - ./docker/app/thumbnails:/app/thumbnails
+    depends_on:
+      - db
