@@ -6,5 +6,6 @@ ADD . $HOME
 RUN mvn package
 
 FROM openjdk:17
+COPY ./docker/app/thumbnails /app/thumbnails
 COPY --from=build /usr/app/target/BikeCatalog-0.0.1-SNAPSHOT.jar /app/BikeCatalog-0.0.1-SNAPSHOT.jar
 ENTRYPOINT ["java","-jar","/app/BikeCatalog-0.0.1-SNAPSHOT.jar"]

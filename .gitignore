@@ -35,4 +35,3 @@ build/
 ### custom ###
 .DS_Store
 public/
-docker/db/

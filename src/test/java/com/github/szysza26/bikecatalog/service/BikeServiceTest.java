@@ -1,5 +1,6 @@
 package com.github.szysza26.bikecatalog.service;
 
+import com.github.szysza26.bikecatalog.InitialDataLoader;
 import com.github.szysza26.bikecatalog.controller.NotFoundException;
 import com.github.szysza26.bikecatalog.dto.SearchBikeRequest;
 import com.github.szysza26.bikecatalog.model.Bike;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class BikeServiceTest {
 
+    @MockBean
+    private InitialDataLoader initialDataLoader;
     @Autowired
     private BikeRepository bikeRepository;
     @Autowired

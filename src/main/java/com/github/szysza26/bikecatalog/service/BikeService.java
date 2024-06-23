@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
@@ -40,6 +41,7 @@ public class BikeService {
         return bikes;
     }
 
+    @Transactional
     public Page<Bike> getBikes(SearchBikeRequest search) {
         String[] splitSort = search.getSort().split("\\.", 2);
         String sortBy = splitSort[0];

@@ -1,11 +1,13 @@
 package com.github.szysza26.bikecatalog.service;
 
+import com.github.szysza26.bikecatalog.InitialDataLoader;
 import com.github.szysza26.bikecatalog.model.Category;
 import com.github.szysza26.bikecatalog.repository.CategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedHashMap;
@@ -18,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Transactional
 public class CategoryServiceTest {
 
+    @MockBean
+    InitialDataLoader initialDataLoader;
     @Autowired
     private CategoryRepository categoryRepository;
     @Autowired
